@@ -20,6 +20,7 @@ void reverse_to_hex(const unsigned char *input, size_t len, unsigned char *outpu
     char hex[64];
     
     for (size_t i = 0; i < 32; i++) {
+        // Reverse the bytes and convert to hex in one go
         unsigned char byte = input[31 - i];
         output[i] = byte;
         hex[2 * i]     = hex_digits[byte >> 4];
@@ -29,9 +30,9 @@ void reverse_to_hex(const unsigned char *input, size_t len, unsigned char *outpu
     hex[64] = '\0';
 }
 
-void sha256d(unsigned char *byte_data, size_t len, unsigned char *hash, unsigned char *res, char *result) {
+void sha256d(unsigned char *byte_data, size_t len, unsigned char *hash, unsigned char *final, char *result) {
     sha256(byte_data, len, hash);
-    sha256(hash, 32, res);
+    sha256(hash, 32, final);
 
 }
 
@@ -44,6 +45,8 @@ int main() {
     unsigned char result[32];
 
     hex_to_bytes(hexstring, byte_data, len);
+
+    sha256d(byte_data, len, hash, final, result);
 
     reverse_to_hex(final, 32, result);
 
